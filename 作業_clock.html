@@ -17,45 +17,62 @@
         }
 
         body {
-            height: 100%;
+            height: 100vh;
+        }
+
+        #main{
+            height: 70%;
+            position: relative;            
+        }
+        #word{
+            height: 10%;
+            position: relative;
+        }
+        #footer{
+            height: 20%;
+            position: relative;
         }
 
         #clock {
-            width: 442px;
-            height: 402px;
-            background: url(./img/final_clock.png)no-repeat;
-            background-size: 442px 402px;
-
-            margin: auto;
+            width: 250px;
+            height: 250px;            
 
             display: block;
-            position: relative;
-            top: 200px;
+            
+            position: absolute;
+            margin: auto;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
         }
 
-        #hour {
+        #clock img {
+            width: 100%;
+        }
+
+        .hour {
             width: 16%;
-            height: 8px;
+            height: 5px;
             background: rgb(59, 59, 58);
 
             border-radius: 8px;
 
             position: absolute;
-            top: calc(50% - 2px);
+            top: calc(50% - 6px);
             /* calc 裡的運算符號前後一定要以空白 */
             left: 50%;
 
             transform-origin: left center;
         }
 
-        #minute {
+        .minute {
             width: 24%;
-            height: 8px;
+            height: 5px;
             background: rgba(44, 44, 43);
             border-radius: 5px;
 
             position: absolute;
-            top: calc(50% - 2px);
+            top: calc(50% - 6px);
             /* calc 裡的運算符號前後一定要以空白 */
             left: 50%;
 
@@ -63,27 +80,26 @@
         }
 
         .minute-img {
-            width: 60px;
-            height: 45px;
+            width: 53px;
+            height: 33px;
             background: url(./img/final_turtle.png)no-repeat;
-            background-size: 60px 45px;
+            background-size: 53px 33px;
 
             position: absolute;
-            top: -557%;
-            left: 98%;
-            transform-origin: left center;
-
-            transform: rotate(94deg);
+            top: -35px;
+            left: 60px;
+            transform-origin: left;
+            transform: rotate(100deg);
         }
 
-        #second {
+        .second {
             width: 70%;
             height: 2px;
             /* background: yellowgreen; */
             border-radius: 5px;
 
             position: absolute;
-            top: calc(50% - 2px);
+            top: calc(50% - 6px);
             /* calc 裡的運算符號前後一定要以空白 */
             left: 50%;
 
@@ -91,42 +107,40 @@
         }
 
         .second-img {
-            width: 125px;
-            height: 109px;
+            width: 180px;
+            height: 165px;
 
             background: url(./img/rabbit-unscreen.gif)no-repeat;
-            background-size: 200px 200px;
+            background-size: 300px 300px;
 
             position: absolute;
-            top: -500%;
-            left: 90%;
-            transform: rotate(-248deg);
-            transform-origin: left center;
+            top: -91px;
+            left: 31px;
+            transform: rotate(73deg);
+            transform-origin: right;
         }
 
         #nowTime {
-            width: 50%;
-
-            font-size: 50px;
+            font-size: 40px;
             font-family: 'Gochi Hand', cursive;
 
             position: absolute;
-            top: 50%;
+            /* top: 400px; */
             left: 50%;
             transform: translate(-50%);
             text-align: center;
             margin: auto;
         }
 
-        #carrot {
+        .carrot-box {
             width: 100%;
-            height: 260px;
+            height: 70px;
             background: url(./img/final_carrot.png);
-            background-size: 135px 260px;
+            background-size: 40px 70px;
             opacity: 0.5;
 
             position: absolute;
-            bottom: 1%;
+            bottom: 3%;
             left: 100%;
             transform-origin: left;
 
@@ -136,21 +150,35 @@
 </head>
 
 <body>
-    <div id="clock">
-        <div id="hour"></div>
-        <div id="minute">
-            <div class="minute-img"></div>
+    <!-- 時鐘區 ---------------------------------->
+    <section id="main">
+        <div id="clock">
+            <img src="./img/final_clock.png" alt="">
+            <div class="hour"></div>
+            <div class="minute">
+                <div class="minute-img"></div>
+            </div>
+            <div class="second">
+                <div class="second-img"></div>
+            </div>
         </div>
-        <div id="second">
-            <div class="second-img"></div>
-        </div>
-    </div>
-    <div id="carrot"></div>
-    <div id="nowTime"></div>
+    </section>
+
+    <!-- 時間區 ------------------------------------>
+    <section id="word">
+        <div id="nowTime"></div>
+    </section>
+
+    <!-- 胡蘿蔔區------------------------------------>
+    <section id="footer"> 
+        <div class="carrot-box"></div>        
+    </section>
+
+
     <script>
-        const hour = document.getElementById('hour');
-        const minute = document.getElementById('minute');
-        const second = document.getElementById('second');
+        const hour = document.querySelector('.hour');
+        const minute = document.querySelector('.minute');
+        const second = document.querySelector('.second');
 
         const update = () => {
             const now = new Date();
@@ -161,10 +189,37 @@
         setInterval(update, 1000);
         update();
 
-        let now = new Date();
-        let str = `${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()} - ${now.getHours()} : ${now.getMinutes()}`;
-        const nowTime = document.getElementById('nowTime');
-        nowTime.textContent = str;
+
+        function showTime(){
+            let now = new Date();
+            let year = now.getFullYear();
+            let mon = now.getMonth() + 1;
+            let date = now.getDate();
+            let hr = now.getHours();
+            let min = now.getMinutes();
+            let sec = now.getSeconds();
+            let session = 'AM';
+
+            if(hr == 0){
+                hr = 12;
+            }else if(hr > 12){
+                hr -= 12;
+                session = 'PM';
+            }
+
+
+            hr = (hr < 10) ? '0' + hr : hr;
+            min = (min < 10) ? '0' + min : min;
+            sec = (sec < 10) ? '0' + sec : sec;
+
+            let str = `${year}.${mon}.${date} - ${hr} : ${min} : ${sec} ${session}`;
+            const nowTime = document.getElementById('nowTime');
+            nowTime.textContent = str;
+
+            setTimeout(showTime,1000);
+        }
+
+        showTime();
     </script>
 </body>
 
